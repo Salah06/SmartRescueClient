@@ -1,0 +1,104 @@
+﻿Sujet V8 Groupe 1
+Projet:
+        Gestion des interventions des pompiers - police - ambulance en cas de problème
+
+
+
+
+
+
+1. La personne appelle le standard (type d’incident, adresse)
+   1. Être notifiée via le système de caméra un accident / problème
+1. Le standard rentre les informations dans un système central
+2. Le système central vérifie le véhicule le plus prêt pour intervenir (Localisation en permanence de tous les véhicules)
+3. Le central notifie le système du véhicule correspondant (Système mobile ou embarqué dans la voiture)
+4. Le véhicule confirme la prise en charge de l’opération
+5. Communication avec le système de feux pour avoir tous les feux au vert jusqu’au point d’intervention
+6. En fonction de la gravité, pouvoir demander un transfert à l'hôpital (systeme vehicule)
+7. Le système central effectue des requêtes pour les hôpitaux pour savoir lequel peut prendre en charge
+8. Envoi du nouvel itinéraire au véhicule
+
+
+
+
+Véhicules:
+        Voitures
+        Hélicoptère
+
+
+
+
+Systèmes
+
+
+Système Central (ville)
+Véhicules envoient les coordonnées GPS en permanence
+Système embarqué des véhicules (suivant type d’intervention)
+Interaction avec le service des feux tricolores
+Interaction avec les hôpitaux
+Interaction avec les caméras
+
+
+
+
+MVP:
+        Système dans lequel on rentre des infos
+        Envoie de notification à un seul véhicule
+        Véhicule confirme la prise en charge
+        Traitement de la prise en charge
+
+
+
+
+
+
+Acteurs
+
+
+Internes:
+
+
+I1 : Astreinte, rentre les informations dans le centrale
+I2 : Personnel du véhicule
+
+
+        Externes:
+
+
+E1: Personnel hôpital pour la prise en charge
+E2 : Personne donnant l’alerte
+
+
+
+
+
+
+
+
+Fonctionnalités:
+
+
+        Système Central
+                Regrouper la localisation de tous les véhicules
+                Répartir les interventions (choix du véhicule)
+                Calcul d'itinéraire jusqu’au point (Jusqu’au point d’intervention puis le retour)
+                Requête d’optimisation des feux
+                Requête aux hôpitaux pour savoir lequel peut prendre en charge
+                Réception des réponses des hôpitaux pour calcul itineraire
+                Mettre à jour un historique des événements 
+
+
+        Module de Statistiques (Génération des zones a risques, % de blessés etc…)
+                
+                
+                
+
+
+
+
+        Système Véhicule
+                 Être alerté de l’intervention avec l’itinéraire à prendre
+                Confirmer la prise en charge de l’intervention
+                Demander la prise en charge par hôpital
+                Réceptionner l'itinéraire jusqu’au point d’intervention
+                Réceptionner l'itinéraire jusqu'à l'hôpital
