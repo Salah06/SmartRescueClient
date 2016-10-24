@@ -1,16 +1,26 @@
 package com.smartcity.smartrescue;
 
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
+
+    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference locRef = dbRef.child("location");
+
+    TextView gpsCoordView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,17 +35,25 @@ public class MainActivity extends AppCompatActivity {
                     LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION );
         }
 
+        gpsCoordView = (TextView) findViewById(R.id.gps_coord);
         LocationService ls = LocationService.getLocationManager(this);
-        Location loc = ls.location;
+    }
 
-        if (null != loc) {
-            TextView gpsCoordView = (TextView) findViewById(R.id.gps_coord);
-            String str = "Lat : " +
-                    loc.getLatitude() +
-                    "Long : " +
-                    loc.getLongitude();
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-            gpsCoordView.setText(str);
-        }
+        locRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String text = dataSnapshot.getValue(String.class);
+                gpsCoordView.setText(text);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

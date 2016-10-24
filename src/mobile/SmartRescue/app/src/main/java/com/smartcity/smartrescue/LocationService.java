@@ -8,6 +8,10 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import timber.log.Timber;
 
 public class LocationService implements LocationListener {
@@ -21,6 +25,9 @@ public class LocationService implements LocationListener {
     private LocationManager lm;
     private boolean isGPSEnabled = false;
     private boolean isNetworkEnabled = false;
+
+    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference locRef = dbRef.child("location");
 
     public static LocationService getLocationManager(Context context) {
         if (null == instance) {
@@ -53,7 +60,6 @@ public class LocationService implements LocationListener {
                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                 if (lm != null)   {
                     location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//                    updateCoordinates();
                 }
             }
 
@@ -64,7 +70,6 @@ public class LocationService implements LocationListener {
 
                 if (lm != null)  {
                     location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                    updateCoordinates();
                 }
             }
         }
@@ -73,11 +78,9 @@ public class LocationService implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
-        String str = "Lat : " +
-                location.getLatitude() +
-                "Long : " +
-                location.getLongitude();
-        Timber.d("Location changed : "+ str);
+        String str = location.getLatitude() +";"+ location.getLongitude();
+        locRef.setValue(str);
+        Timber.d("Location changed : %s", str);
     }
 
     @Override
