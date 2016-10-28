@@ -13,7 +13,9 @@ import (
     "bufio"
     "log"
     "fmt"
+    "gopkg.in/zabawaba99/firego.v1"
 )
+
 
 // +slide
 func handleConnection(conn net.Conn) {
@@ -30,19 +32,44 @@ func handleConnection(conn net.Conn) {
     }
 }
 
-func main() {
-    listener, err := net.Listen("tcp", "localhost:1234")
-    if err != nil {
-        log.Fatal(err)
+func CheckError(err error) {
+    if err  != nil {
+        fmt.Println("Error: " , err)
     }
+}
+
+func main() {
+    f := firego.New("https://smartrescue-6e8ce.firebaseio.com", client)
+    f.Auth("AIzaSyAtsc7v1IEUIPsD3dHkIev3B8ysHvunLd0")
+    f.Unauth()
+
+    var v map[string]interface{}
+    if err := f.Value(&v); err != nil {
+        log.Fatal(err)
+    
+    fmt.Printf("%s\n", v)
+
+}
+
+    /*
+    ServerAddr,err := net.ResolveUDPAddr("udp",":2345")
+    CheckError(err)
+
+
+    ServerConn, err := net.ListenUDP("udp", ServerAddr)
+    defer ServerConn.Close()
+    CheckError(err)
+
+    buf := make([]byte, 1024)
 
     for {
-        conn, err := listener.Accept()
+        n,addr,err := ServerConn.ReadFromUDP(buf)
+        fmt.Println("Received ",string(buf[0:n]), " from ",addr)
+
         if err != nil {
-            log.Println(err)
-            continue
-        }
-        go handleConnection(conn)
+            fmt.Println("Error: ",err)
+        } 
+        ServerConn.WriteToUDP([]byte("ack"), addr)
     }
 }
 // ---
