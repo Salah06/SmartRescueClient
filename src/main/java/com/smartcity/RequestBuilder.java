@@ -3,9 +3,14 @@ package com.smartcity;
 import com.smartcity.entity.Level;
 import com.smartcity.entity.Request;
 import com.smartcity.entity.Services;
-import com.smartcity.soap.TestService;
-import com.smartcity.soap.TestServiceSoap;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.ws.BindingProvider;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,24 +24,12 @@ import java.net.URL;
 
 public class RequestBuilder {
     BufferedReader br;
-    TestServiceSoap service;
+    String SERVER_ENDPOINT;
 
     public RequestBuilder() {
         br = new BufferedReader(new InputStreamReader(System.in));
+        SERVER_ENDPOINT = "http://localhost:8080/someresource";
 
-        System.out.println("----- Requete envoyee ----");
-        String host = "localhost";
-        String port = "8181";
-        System.out.println("\n\nStarting Remote Client for Smart Rescue");
-        System.out.println("  - Remote server: " + host);
-        System.out.println("  - Port number:   " + port);
-
-        URL wsdlLocation = App.class.getResource("/newService.wsdl");
-        TestService factory = new TestService(wsdlLocation);
-
-        service = factory.getTestServiceSoap();
-        String address = "http://" + host + ":" + port + "/index.go";
-        ((BindingProvider) service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, address);
     }
 
     /**
@@ -117,10 +110,30 @@ public class RequestBuilder {
 
     /**
      * Function that sends a request to the server
-     * @param request The request to send
+     * @param newRequest The request to send
      */
-    public void sendRequest(Request request){
-        service.handleRequest(request.getService().name(),request.getEmergencyLevel().name(),request.getAddress());
+    public void sendRequest(Request newRequest){
+        Form form = new Form();
+        form.param("address", newRequest.getAddress());
+        form.param("emergencyLevel", newRequest.getEmergencyLevel().name());
+        form.param("service", newRequest.getService().name());
+
+        Client client = ClientBuilder.newClient();
+
+        WebTarget resource = client.target(SERVER_ENDPOINT);
+
+        Invocation.Builder request = resource.request();
+        request.accept(MediaType.APPLICATION_JSON);
+
+        Response response = request.get();
+
+        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
+            System.out.println("Success! " + response.getStatus());
+            System.out.println(response.getEntity());
+        } else {
+            System.out.println("ERROR! " + response.getStatus());
+            System.out.println(response.getEntity());
+        }
 
         System.out.println("----- Requete envoyee ----");
     }
