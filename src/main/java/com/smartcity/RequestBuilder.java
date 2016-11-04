@@ -121,7 +121,7 @@ public class RequestBuilder {
         Invocation.Builder request = resource.request();
         request.accept(MediaType.APPLICATION_JSON);
 
-        Response response = request.post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),  Response.class);
+        Response response = request.post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);
 
         if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
             System.out.println("Success! " + response.getStatus());
