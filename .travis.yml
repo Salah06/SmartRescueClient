@@ -1,4 +1,5 @@
 language: java
-mvn clean package
-mvn exec:java
-
+sudo: false
+script: 
+- mvn clean package
+- mvn exec:java
