@@ -31,11 +31,11 @@ public class RequestBuilder {
         System.out.println("----- Requete envoyee ----");
         String host = "localhost";
         String port = "8181";
-        System.out.println("\n\nStarting Remote Client for Elibi");
+        System.out.println("\n\nStarting Remote Client for Smart Rescue");
         System.out.println("  - Remote server: " + host);
         System.out.println("  - Port number:   " + port);
 
-        URL wsdlLocation = App.class.getResource("/SalesService.wsdl");
+        URL wsdlLocation = App.class.getResource("/newService.wsdl");
         TestService factory = new TestService(wsdlLocation);
 
         service = factory.getTestServiceSoap();
