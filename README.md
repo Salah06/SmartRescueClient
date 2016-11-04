@@ -1,4 +1,4 @@
-** Projet AL - SmartRescue **
+# Projet AL - SmartRescue
 
 - Salah Dahmoul
 - Simon Paris
