@@ -119,7 +119,6 @@ public class RequestBuilder {
         form.param("service", newRequest.getService().name());
 
         Client client = ClientBuilder.newClient();
-
         WebTarget resource = client.target(SERVER_ENDPOINT);
 
         Invocation.Builder request = resource.request();
