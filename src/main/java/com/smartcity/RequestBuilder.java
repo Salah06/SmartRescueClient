@@ -4,10 +4,7 @@ import com.smartcity.entity.Level;
 import com.smartcity.entity.Request;
 import com.smartcity.entity.Services;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -124,7 +121,7 @@ public class RequestBuilder {
         Invocation.Builder request = resource.request();
         request.accept(MediaType.APPLICATION_JSON);
 
-        Response response = request.get();
+        Response response = request.post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),  Response.class);
 
         if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
             System.out.println("Success! " + response.getStatus());
