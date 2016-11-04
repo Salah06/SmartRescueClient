@@ -3,18 +3,14 @@ package com.smartcity;
 import com.smartcity.entity.Level;
 import com.smartcity.entity.Request;
 import com.smartcity.entity.Services;
-import com.smartcity.soap.HandleRequest;
-import com.smartcity.soap.ObjectFactory;
 import com.smartcity.soap.TestService;
 import com.smartcity.soap.TestServiceSoap;
-import jdk.internal.org.objectweb.asm.Handle;
 
 import javax.xml.ws.BindingProvider;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.Buffer;
-import java.util.Scanner;
+
 
 /**
  * Builder that requests the client
@@ -25,7 +21,7 @@ public class RequestBuilder {
     BufferedReader br;
     TestServiceSoap service;
 
-    public RequestBuilder(){
+    public RequestBuilder() {
         br = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("----- Requete envoyee ----");
@@ -41,7 +37,6 @@ public class RequestBuilder {
         service = factory.getTestServiceSoap();
         String address = "http://" + host + ":" + port + "/index.go";
         ((BindingProvider) service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, address);
-
     }
 
     /**
@@ -127,6 +122,6 @@ public class RequestBuilder {
     public void sendRequest(Request request){
         service.handleRequest(request.getService().name(),request.getEmergencyLevel().name(),request.getAddress());
 
-        System.out.println("Request Sent");
+        System.out.println("----- Requete envoyee ----");
     }
 }
