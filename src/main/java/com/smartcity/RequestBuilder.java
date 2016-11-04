@@ -3,15 +3,13 @@ package com.smartcity;
 import com.smartcity.entity.Level;
 import com.smartcity.entity.Request;
 import com.smartcity.entity.Services;
+import org.restlet.Response;
+import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.resource.ClientResource;
 
-import javax.ws.rs.client.*;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.xml.ws.BindingProvider;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.URL;
 
 
 /**
@@ -110,27 +108,26 @@ public class RequestBuilder {
      * @param newRequest The request to send
      */
     public void sendRequest(Request newRequest){
-        Form form = new Form();
-        form.param("address", newRequest.getAddress());
-        form.param("emergencyLevel", newRequest.getEmergencyLevel().name());
-        form.param("service", newRequest.getService().name());
+        try {
+            Form form = new Form();
+            form.add("service", newRequest.getService().name());
+            form.add("address", newRequest.getAddress());
+            form.add("emergencyLevel", newRequest.getEmergencyLevel().name());
 
-        Client client = ClientBuilder.newClient();
-        WebTarget resource = client.target(SERVER_ENDPOINT);
+            ClientResource resource = new ClientResource(SERVER_ENDPOINT);
 
-        Invocation.Builder request = resource.request();
-        request.accept(MediaType.APPLICATION_JSON);
+            resource.post(form, MediaType.APPLICATION_JSON);
 
-        Response response = request.post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);
+            if (resource.getStatus().isSuccess()) {
+                System.out.println("Success! " + resource.getStatus());
+            } else {
+                System.out.println("ERROR! " + resource.getStatus());
+                System.out.println(resource.getOnResponse());
+            }
 
-        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-            System.out.println("Success! " + response.getStatus());
-            System.out.println(response.getEntity());
-        } else {
-            System.out.println("ERROR! " + response.getStatus());
-            System.out.println(response.getEntity());
+            System.out.println("----- Requete envoyee ----");
+        }catch(Exception e){
+            System.out.println("Error during request send");
         }
-
-        System.out.println("----- Requete envoyee ----");
     }
 }

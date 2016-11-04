@@ -10,8 +10,17 @@
   <name>smartrescue</name>
   <url>http://maven.apache.org</url>
 
+  <repositories>
+    <repository>
+      <id>maven-restlet</id>
+      <name>Restlet repository</name>
+      <url>https://maven.restlet.com</url>
+    </repository>
+  </repositories>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <restlet-version>2.3.7</restlet-version>
   </properties>
 
   <dependencies>
@@ -21,11 +30,15 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>2.24</version>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet</artifactId>
+      <version>${restlet-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet.ext.jackson</artifactId>
+      <version>${restlet-version}</version>
     </dependency>
 
   </dependencies>
