@@ -3,9 +3,16 @@ package com.smartcity;
 import com.smartcity.entity.Level;
 import com.smartcity.entity.Request;
 import com.smartcity.entity.Services;
+import com.smartcity.soap.HandleRequest;
+import com.smartcity.soap.ObjectFactory;
+import com.smartcity.soap.TestService;
+import com.smartcity.soap.TestServiceSoap;
+import jdk.internal.org.objectweb.asm.Handle;
 
+import javax.xml.ws.BindingProvider;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.Buffer;
 import java.util.Scanner;
 
@@ -16,9 +23,25 @@ import java.util.Scanner;
 
 public class RequestBuilder {
     BufferedReader br;
+    TestServiceSoap service;
 
     public RequestBuilder(){
         br = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("----- Requete envoyee ----");
+        String host = "localhost";
+        String port = "8181";
+        System.out.println("\n\nStarting Remote Client for Elibi");
+        System.out.println("  - Remote server: " + host);
+        System.out.println("  - Port number:   " + port);
+
+        URL wsdlLocation = App.class.getResource("/SalesService.wsdl");
+        TestService factory = new TestService(wsdlLocation);
+
+        service = factory.getTestServiceSoap();
+        String address = "http://" + host + ":" + port + "/index.go";
+        ((BindingProvider) service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, address);
+
     }
 
     /**
@@ -46,6 +69,9 @@ public class RequestBuilder {
             Request request = createRequest(type,urgencyLevel,address);
             System.out.println("\n---- Request created ----");
             System.out.println(request);
+
+            sendRequest(request);
+
             System.out.println("==========================");
             System.out.println("---- End of Request ----");
             System.out.println("==========================");
@@ -99,6 +125,8 @@ public class RequestBuilder {
      * @param request The request to send
      */
     public void sendRequest(Request request){
-        System.out.println("----- Requete envoyee ----");
+        service.handleRequest(request.getService().name(),request.getEmergencyLevel().name(),request.getAddress());
+
+        System.out.println("Request Sent");
     }
 }
