@@ -1,12 +1,11 @@
 package com.smartcity;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 import com.smartcity.entity.Level;
 import com.smartcity.entity.Request;
 import com.smartcity.entity.Services;
-import org.restlet.Response;
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.resource.ClientResource;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -107,27 +106,16 @@ public class RequestBuilder {
      * Function that sends a request to the server
      * @param newRequest The request to send
      */
-    public void sendRequest(Request newRequest){
+    public void sendRequest(Request newRequest) {
         try {
-            Form form = new Form();
-            form.add("service", newRequest.getService().name());
-            form.add("address", newRequest.getAddress());
-            form.add("emergencyLevel", newRequest.getEmergencyLevel().name());
-
-            ClientResource resource = new ClientResource(SERVER_ENDPOINT);
-
-            resource.post(form, MediaType.APPLICATION_JSON);
-
-            if (resource.getStatus().isSuccess()) {
-                System.out.println("Success! " + resource.getStatus());
-            } else {
-                System.out.println("ERROR! " + resource.getStatus());
-                System.out.println(resource.getOnResponse());
-            }
-
-            System.out.println("----- Requete envoyee ----");
-        }catch(Exception e){
-            System.out.println("Error during request send");
+            HttpResponse<JsonNode> jsonResponse = Unirest.post(SERVER_ENDPOINT)
+                    .header("accept", "application/json")
+                    .field("emergencyLevel", newRequest.getEmergencyLevel().name())
+                    .field("address", newRequest.getAddress())
+                    .field("service", newRequest.getService().name())
+                    .asJson();
+        } catch (Exception e){
+            System.err.println("Could not send request to server");
         }
     }
 }
