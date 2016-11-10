@@ -110,9 +110,7 @@ public class RequestBuilder {
         try {
             HttpResponse<JsonNode> jsonResponse = Unirest.post(SERVER_ENDPOINT)
                     .header("accept", "application/json")
-                    .field("emergencyLevel", newRequest.getEmergencyLevel().name())
-                    .field("address", newRequest.getAddress())
-                    .field("service", newRequest.getService().name())
+                    .body("Test")
                     .asJson();
         } catch (Exception e){
             System.err.println("Could not send request to server");
