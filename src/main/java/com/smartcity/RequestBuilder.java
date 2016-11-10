@@ -22,7 +22,7 @@ public class RequestBuilder {
 
     public RequestBuilder() {
         br = new BufferedReader(new InputStreamReader(System.in));
-        SERVER_ENDPOINT = "http://localhost:8080/someresource";
+        SERVER_ENDPOINT = "http://localhost:1234";
 
     }
 
@@ -108,9 +108,11 @@ public class RequestBuilder {
      */
     public void sendRequest(Request newRequest) {
         try {
-            HttpResponse<JsonNode> jsonResponse = Unirest.post(SERVER_ENDPOINT)
+            Unirest.post(SERVER_ENDPOINT)
                     .header("accept", "application/json")
-                    .body("Test")
+                    .field("emergencyLevel", newRequest.getEmergencyLevel().name())
+                    .field("address", newRequest.getAddress())
+                    .field("service", newRequest.getService().name())
                     .asJson();
         } catch (Exception e){
             System.err.println("Could not send request to server");
