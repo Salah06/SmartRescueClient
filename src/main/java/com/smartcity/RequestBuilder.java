@@ -109,7 +109,6 @@ public class RequestBuilder {
     public void sendRequest(Request newRequest) {
         try {
             Unirest.post(SERVER_ENDPOINT)
-                    .header("accept", "application/json")
                     .field("emergencyLevel", newRequest.getEmergencyLevel().name())
                     .field("address", newRequest.getAddress())
                     .field("service", newRequest.getService().name())
