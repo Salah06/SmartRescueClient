@@ -22,7 +22,7 @@ public class RequestBuilder {
 
     public RequestBuilder() {
         br = new BufferedReader(new InputStreamReader(System.in));
-        SERVER_ENDPOINT = "http://localhost:1234";
+        SERVER_ENDPOINT = "http://localhost:1234/";
 
     }
 
@@ -113,7 +113,7 @@ public class RequestBuilder {
                     .field("emergencyLevel", newRequest.getEmergencyLevel().name())
                     .field("address", newRequest.getAddress())
                     .field("service", newRequest.getService().name())
-                    .asJson();
+                    .asString();
         } catch (Exception e){
             System.err.println("Could not send request to server");
         }
