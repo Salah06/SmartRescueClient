@@ -1,7 +1,5 @@
 package com.smartcity;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.smartcity.entity.Level;
 import com.smartcity.entity.Request;
@@ -22,7 +20,8 @@ public class RequestBuilder {
 
     public RequestBuilder() {
         br = new BufferedReader(new InputStreamReader(System.in));
-        SERVER_ENDPOINT = "http://localhost:1234/";
+        SERVER_ENDPOINT = "http://morning-beyond-41458.herokuapp.com/java";
+        //SERVER_ENDPOINT = "http://localhost:1234/java";
 
     }
 
@@ -42,7 +41,7 @@ public class RequestBuilder {
             System.out.println("\n---- Veuillez entrer le niveau d'urgence ----");
             System.out.println("- 1) Bas -");
             System.out.println("- 2) Moyen -");
-            System.out.println("- 2) Elevé -");
+            System.out.println("- 3) Elevé -");
             int urgencyLevel = Integer.parseInt(br.readLine());
 
             System.out.println("\n---- Veuillez entrer l'adresse concernée ----");
